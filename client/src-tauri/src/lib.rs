@@ -36,6 +36,7 @@ struct BackendInfo {
 }
 
 /// 极简 HTTP 健康探测:只关心 /api/health 是否返回 200(区分本产品与端口上的其他服务)
+#[cfg(desktop)]
 fn http_health_ok(port: u16) -> bool {
     let Ok(addr) = format!("127.0.0.1:{port}").parse() else {
         return false;
@@ -54,11 +55,13 @@ fn http_health_ok(port: u16) -> bool {
     head.starts_with("HTTP/1.1 200") || head.starts_with("HTTP/1.0 200")
 }
 
+#[cfg(desktop)]
 fn port_is_free(port: u16) -> bool {
     TcpListener::bind(("127.0.0.1", port)).is_ok()
 }
 
 /// 无外部依赖的随机口令(本机 admin 初始密码)
+#[cfg(desktop)]
 fn random_token() -> String {
     use std::hash::{BuildHasher, Hasher};
     let make = |salt: u64| {
@@ -74,11 +77,13 @@ fn random_token() -> String {
     format!("{:016x}{:016x}", make(1), make(2))
 }
 
+#[cfg(desktop)]
 fn python_exe_name() -> &'static str {
     if cfg!(windows) { "python.exe" } else { "python3" }
 }
 
 /// 读取或首次生成内置管理员口令(明文留在用户自己的数据目录)
+#[cfg(desktop)]
 fn ensure_admin_credentials(data_dir: &PathBuf) -> (String, String) {
     let cred_file = data_dir.join("admin-credentials.txt");
     if let Ok(content) = fs::read_to_string(&cred_file) {
@@ -99,6 +104,7 @@ fn ensure_admin_credentials(data_dir: &PathBuf) -> (String, String) {
     ("admin".into(), pwd)
 }
 
+#[cfg(desktop)]
 fn spawn_backend(
     resources: &PathBuf,
     data_dir: &PathBuf,
@@ -155,6 +161,19 @@ fn copy_to_log<R: Read + Send + 'static>(mut src: R, log_path: PathBuf) {
 }
 
 fn ensure_backend(app: &AppHandle) -> BackendState {
+    // 移动端不内嵌后端:返回空地址,由前端引导用户配置远程服务器
+    #[cfg(mobile)]
+    {
+        let _ = app;
+        return BackendState::default();
+    }
+
+    #[cfg(desktop)]
+    ensure_backend_desktop(app)
+}
+
+#[cfg(desktop)]
+fn ensure_backend_desktop(app: &AppHandle) -> BackendState {
     // 1) 已有健康服务(开发后端/上次残留) → 复用,不接管
     if http_health_ok(BASE_PORT) {
         return BackendState {
@@ -252,6 +271,12 @@ fn ensure_backend(app: &AppHandle) -> BackendState {
 }
 
 fn kill_backend(state: &BackendState) {
+    #[cfg(mobile)]
+    {
+        let _ = state;
+    }
+
+    #[cfg(desktop)]
     if let Ok(mut guard) = state.child.lock() {
         if let Some(mut child) = guard.take() {
             #[cfg(windows)]
