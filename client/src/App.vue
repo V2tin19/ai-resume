@@ -56,6 +56,8 @@ const antdThemeConfig = computed(() => ({
 @media (max-width: 768px) {
   .app-content {
     min-height: 100svh;
+    /* viewport-fit=cover 后内容延伸进状态栏,顶部补偿安全区 */
+    padding-top: env(safe-area-inset-top);
     padding-bottom: calc(76px + env(safe-area-inset-bottom));
   }
 }

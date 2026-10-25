@@ -27,6 +27,12 @@ const routes: Array<RouteRecordRaw> = [
     meta: { title: "AI简历 - 网站配置" }
   },
   {
+    path: "/me",
+    name: "me",
+    component: () => import("@/views/me/index.vue"),
+    meta: { title: "AI简历 - 我的" }
+  },
+  {
     path: "/admin",
     name: "admin",
     component: () => import("@/views/admin/index.vue"),

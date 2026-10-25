@@ -26,12 +26,12 @@
             AI深度交流
           </router-link>
         </li>
-        <!-- 移动端底栏入口:打开账号与设置抽屉 -->
+        <!-- 移动端底栏入口:独立"我的"页面 -->
         <li class="mobile-only">
-          <a role="button" tabindex="0" @click="drawerOpen = true" @keydown.enter="drawerOpen = true">
+          <router-link to="/me">
             <SvgIcon iconName="setting" />
             我的
-          </a>
+          </router-link>
         </li>
       </ul>
     </nav>
@@ -64,19 +64,14 @@
               <logout-outlined />
               退出登录
             </a-menu-item>
-            <a-menu-item v-else key="auth">
-              <user-outlined />
-              注册 / 登录
-            </a-menu-item>
           </a-menu>
         </template>
       </a-dropdown>
     </div>
   </header>
 
-  <UserSettingsDrawer v-model:open="drawerOpen" />
-
   <a-tour
+    v-if="!isMobile"
     v-model:open="tourOpen"
     :steps="tourSteps"
     :mask="true"
@@ -92,21 +87,22 @@
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import type { TourProps } from "ant-design-vue";
-import { SettingOutlined, LogoutOutlined, UserOutlined, DashboardOutlined } from '@ant-design/icons-vue';
+import { SettingOutlined, LogoutOutlined, DashboardOutlined } from '@ant-design/icons-vue';
 import SvgIcon from "../SvgIcon.vue";
-import UserSettingsDrawer from "../UserSettingsDrawer.vue";
 import { useResumeStore } from "../../store/useResumeStore";
 import { useBackendHealth } from "../../composables/useBackendHealth";
+import { useIsMobile } from "../../composables/useIsMobile";
 import { getSessionUser, clearSession, type SessionUser } from "../../utils/auth";
 
 const store = useResumeStore();
 const route = useRoute();
 const router = useRouter();
 const health = useBackendHealth();
+// 移动端不弹首访引导(a-tour 桌面组件,小屏定位抖动)
+const { isMobile } = useIsMobile();
 const templateStore = ref(null);
 const userMenuRef = ref(null);
 const tourOpen = ref(false);
-const drawerOpen = ref(false);
 // Header 常驻挂载,登录/退出后靠路由变化刷新显示
 const session = ref<SessionUser | null>(getSessionUser());
 const isAdmin = computed(() => session.value?.role === 'admin');
@@ -119,11 +115,9 @@ watch(
 
 const onMenuClick = ({ key }: { key: string | number }) => {
   if (key === 'settings') {
-    drawerOpen.value = true;
+    router.push({ name: 'me' });
   } else if (key === 'admin') {
     router.push({ name: 'admin' });
-  } else if (key === 'logout') {
-    drawerOpen.value = true;
   } else if (key === 'auth') {
     clearSession();
     router.push({ name: 'auth' });
@@ -148,7 +142,7 @@ const handleFinish = () => {
 };
 
 onMounted(() => {
-  if (store.isFirstVisit) {
+  if (store.isFirstVisit && !isMobile.value) {
     tourOpen.value = true;
   }
 });

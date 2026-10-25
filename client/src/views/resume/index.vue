@@ -166,7 +166,7 @@ const handleFileUpload = (file: File) => {
   .mobile-view-tabs {
     display: block;
     position: sticky;
-    top: 0;
+    top: env(safe-area-inset-top);
     z-index: 20;
     padding-bottom: 10px;
     background: var(--toolbar-bg);
