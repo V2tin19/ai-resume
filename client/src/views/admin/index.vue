@@ -77,6 +77,10 @@
           </a-spin>
         </a-tab-pane>
 
+        <a-tab-pane key="model" tab="模型服务">
+          <ModelConfigPanel />
+        </a-tab-pane>
+
         <a-tab-pane key="users" tab="用户管理">
           <a-table
             :data-source="users"
@@ -175,6 +179,7 @@ import {
   type AdminStats,
   type AdminUser
 } from '../../api/agentAPI';
+import ModelConfigPanel from '../agent/components/ModelConfigPanel.vue';
 
 const activeTab = ref('overview');
 const stats = ref<AdminStats | null>(null);

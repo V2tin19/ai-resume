@@ -22,37 +22,44 @@ const configOpen = ref(false);
 </script>
 
 <template>
-  <!-- 移动端:配置入口(聊天区右上角由本栏提供) -->
-  <div v-if="isMobile" class="mobile-config-bar">
-    <span class="mobile-config-title">AI 深度交流</span>
-    <a-button size="small" @click="configOpen = true">
-      <setting-outlined />
-      岗位与经历
-    </a-button>
-  </div>
-
-  <div class="main-box">
-    <div class="left">
-      <AIChat />
+  <!-- 单根包裹:路由过渡(transition)要求单根组件,多根会在页面切换时卡死白屏 -->
+  <div class="aideep-page">
+    <!-- 移动端:配置入口(聊天区右上角由本栏提供) -->
+    <div v-if="isMobile" class="mobile-config-bar">
+      <span class="mobile-config-title">AI 深度交流</span>
+      <a-button size="small" @click="configOpen = true">
+        <setting-outlined />
+        岗位与经历
+      </a-button>
     </div>
-    <div v-if="!isMobile" class="right">
-      <userInput />
-    </div>
-  </div>
 
-  <!-- 移动端配置抽屉 -->
-  <a-drawer
-    v-model:open="configOpen"
-    title="岗位与经历配置"
-    placement="right"
-    :width="320"
-    root-class-name="aideep-config-drawer"
-  >
-    <userInput v-if="configOpen" />
-  </a-drawer>
+    <div class="main-box">
+      <div class="left">
+        <AIChat />
+      </div>
+      <div v-if="!isMobile" class="right">
+        <userInput />
+      </div>
+    </div>
+
+    <!-- 移动端配置抽屉 -->
+    <a-drawer
+      v-model:open="configOpen"
+      title="岗位与经历配置"
+      placement="right"
+      :width="320"
+      root-class-name="aideep-config-drawer"
+    >
+      <userInput v-if="configOpen" />
+    </a-drawer>
+  </div>
 </template>
 
 <style scoped>
+.aideep-page {
+  min-height: 100%;
+}
+
 .mobile-config-bar {
   display: none;
 }
