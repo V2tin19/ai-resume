@@ -71,6 +71,13 @@ class StudentProjectInput(BaseModel):
     description: str = ""
 
 
+class UserLlmConfig(BaseModel):
+    """用户自带模型配置(BYOK):仅当次请求转发,服务端不落库不记明文。"""
+    apiUrl: str = Field(..., max_length=512)
+    apiKey: str = Field(..., min_length=1, max_length=512)
+    model: str = Field(..., min_length=1, max_length=128)
+
+
 class ResumeGenerateRequest(BaseModel):
     name: str = ""
     gender: str = ""
@@ -98,6 +105,7 @@ class ResumeGenerateRequest(BaseModel):
     educationExperiences: List[StudentEducationInput] = []
     workExperiences: List[StudentWorkInput] = []
     projectExperiences: List[StudentProjectInput] = []
+    userLlm: Optional[UserLlmConfig] = Field(default=None, description="用户自带模型配置(可选)")
 
 
 def _none_to_empty(v: Any, info: ValidationInfo) -> Any:
@@ -211,6 +219,7 @@ class ChatMessage(BaseModel):
 class ChatRequest(BaseModel):
     messages: List[ChatMessage] = Field(..., min_length=1, description="对话消息列表")
     stream: bool = Field(default=True, description="是否流式返回")
+    userLlm: Optional[UserLlmConfig] = Field(default=None, description="用户自带模型配置(可选)")
 
 
 class HealthResponse(BaseModel):

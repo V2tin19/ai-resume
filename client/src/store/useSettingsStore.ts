@@ -30,7 +30,8 @@ export const useSettingsStore = defineStore('settings', () => {
     return systemPrefersDark.value;
   });
 
-  const theme = computed<string>(() => (isDark.value ? '#3b6cff' : '#2d5bff'));
+  // 淡雅纸感色板(微信读书风格):低饱和青蓝主色,深浅两档
+  const theme = computed<string>(() => (isDark.value ? '#6f93bd' : '#51789c'));
 
   const applyDomTheme = (dark: boolean) => {
     if (typeof document !== 'undefined') {

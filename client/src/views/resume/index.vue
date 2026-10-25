@@ -199,18 +199,26 @@ const handleFileUpload = (file: File) => {
 
   .btn-group {
     justify-content: flex-start;
-    gap: 8px;
-    padding: 9px;
+    gap: 6px;
+    padding: 6px 8px;
   }
 
   .btn-group-actions {
-    gap: 8px;
+    gap: 6px;
   }
 
+  /* 移动端按钮小型化:小字号不碍事,放得下不溢出 */
   .btn-group :deep(.ant-btn) {
-    min-height: 38px;
-    padding: 0 12px;
+    min-height: 30px;
+    padding: 0 10px;
+    font-size: 12px;
     white-space: nowrap;
+  }
+
+  .btn-group .profile-switcher :deep(.profile-trigger) {
+    min-height: 30px;
+    padding: 2px 8px;
+    font-size: 12px;
   }
 
   :deep(.resume-edit) {

@@ -71,7 +71,7 @@ apiClient.interceptors.response.use(
       message.warning(FRIENDLY_STATUS_TEXT[401]);
       try {
         const { default: router } = await import("../router");
-        await router.push({ name: "auth" });
+        await router.push({ name: "me" });
       } finally {
         setTimeout(() => (authBounced = false), 1000);
       }
@@ -110,6 +110,19 @@ export async function logoutAccount() {
 export async function fetchMe() {
   const response = await apiClient.get("/auth/me");
   return response.data as { username: string; role: "user" | "admin"; email: string };
+}
+
+
+// ---- AI 模型双模式:自带 Key(BYOK)时随请求携带,服务端当次转发不落库 ----
+function getUserLlm(): { apiUrl: string; apiKey: string; model: string } | undefined {
+  if (localStorage.getItem("aiModelMode") !== "custom") return undefined;
+  try {
+    const cfg = JSON.parse(localStorage.getItem("aiCustomLlm") || "null");
+    if (cfg?.apiUrl && cfg?.apiKey && cfg?.model) {
+      return { apiUrl: cfg.apiUrl, apiKey: cfg.apiKey, model: cfg.model };
+    }
+  } catch { /* ignore */ }
+  return undefined;
 }
 
 // ------------------------------------------------------------------ 简历档案
@@ -269,7 +282,8 @@ export async function deleteKnowledgeDocument(documentId: string) {
 }
 
 export async function generateResume(payload: ResumeGenerateRequest) {
-  const response = await apiClient.post("/generate-resume", payload);
+  const userLlm = getUserLlm();
+  const response = await apiClient.post("/generate-resume", userLlm ? { ...payload, userLlm } : payload);
   return response.data as GeneratedResumeResponse;
 }
 
@@ -298,5 +312,10 @@ export async function uploadKnowledgeDocument(file: File) {
 
 // 供 Worker 组装请求使用(工作线程无法读 localStorage)
 export function getWorkerAuthContext() {
-  return { serverBase: getServerBase(), token: getToken(), user: getSessionUser() };
+  return {
+    serverBase: getServerBase(),
+    token: getToken(),
+    user: getSessionUser(),
+    userLlm: getUserLlm(),
+  };
 }

@@ -35,9 +35,11 @@ const antdThemeConfig = computed(() => ({
       <Header />
       <main class="app-content">
         <router-view v-slot="{ Component }">
-          <keep-alive include="aiDeep">
-            <component :is="Component" />
-          </keep-alive>
+          <transition name="page-fade" mode="out-in">
+            <keep-alive include="aiDeep">
+              <component :is="Component" />
+            </keep-alive>
+          </transition>
         </router-view>
       </main>
     </div>
@@ -59,6 +61,31 @@ const antdThemeConfig = computed(() => ({
     /* viewport-fit=cover 后内容延伸进状态栏,顶部补偿安全区 */
     padding-top: env(safe-area-inset-top);
     padding-bottom: calc(76px + env(safe-area-inset-bottom));
+  }
+}
+</style>
+
+<style>
+/* 路由切换过渡:轻位移+淡入(移动端观感平滑) */
+.page-fade-enter-active,
+.page-fade-leave-active {
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.page-fade-enter-from {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.page-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
+/* 触摸按下反馈(移动端轻缩放) */
+@media (max-width: 768px) {
+  .ant-btn:not(:disabled):active {
+    transform: scale(0.97);
   }
 }
 </style>

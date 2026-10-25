@@ -9,6 +9,7 @@
       </div>
       <AccountPanel />
       <ConnectionPanel />
+      <AiModelPanel />
       <ThemePanel />
       <p class="tips">
         大模型调用相关的 API Key、API URL、模型名称等配置由服务端统一管理。
@@ -22,6 +23,7 @@ import { computed } from 'vue';
 import AccountPanel from '../../components/settings/AccountPanel.vue';
 import ConnectionPanel from '../../components/settings/ConnectionPanel.vue';
 import ThemePanel from '../../components/settings/ThemePanel.vue';
+import AiModelPanel from '../../components/settings/AiModelPanel.vue';
 import { useBackendHealth } from '../../composables/useBackendHealth';
 import { getServerBase } from '../../utils/auth';
 

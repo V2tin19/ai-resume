@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router";
-import { getSessionUser, hasSession, hasSkippedAuth } from "@/utils/auth";
+import { getSessionUser } from "@/utils/auth";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -62,16 +62,13 @@ const router = createRouter({
   routes
 });
 
-// 路由守卫:未登录且未选择匿名模式时,引导到注册/登录页。
-// (服务端 AUTH_MODE=optional 时可"先逛逛";required 模式下接口 401 会自动回到本页)
+// 路由守卫:默认允许匿名浏览(不强制登录贴脸),登录入口在「我的」页;
+// 仅运营后台要求 admin。服务端 required 模式下接口 401 由拦截器引导。
 router.beforeEach((to) => {
-  if (to.name === "auth") return true;
-  // 运营后台仅 admin 可进(前端引导;接口层另有 admin 鉴权兜底)
   if (to.name === "admin" && getSessionUser()?.role !== "admin") {
     return { name: "auth", query: { redirect: to.fullPath } };
   }
-  if (hasSession() || hasSkippedAuth()) return true;
-  return { name: "auth", query: to.fullPath !== "/" ? { redirect: to.fullPath } : {} };
+  return true;
 });
 
 router.afterEach((to) => {

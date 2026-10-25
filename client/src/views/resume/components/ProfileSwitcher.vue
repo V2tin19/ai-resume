@@ -169,7 +169,7 @@ function onMenuClick({ key }: { key: string | number }) {
   line-height: 1;
   padding: 3px 6px;
   border-radius: 4px;
-  background: rgba(45, 91, 255, 0.12);
+  background: rgba(81, 120, 156, 0.12);
   color: var(--primary-color);
   flex-shrink: 0;
 }

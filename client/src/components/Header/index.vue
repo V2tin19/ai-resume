@@ -4,32 +4,32 @@
       <ul>
         <li>
           <router-link to="/">
-            <SvgIcon iconName="resume" />
+            <file-text-outlined />
             简历制作
           </router-link>
         </li>
         <li ref="templateStore">
           <router-link to="/template">
-            <SvgIcon iconName="templateStore" />
+            <appstore-outlined />
             模板市场
           </router-link>
         </li>
         <li>
           <router-link to="/agent">
-            <SvgIcon iconName="example" />
+            <robot-outlined />
             简历智能体
           </router-link>
         </li>
         <li>
           <router-link to="/aiDeep">
-            <SvgIcon iconName="ai" />
+            <message-outlined />
             AI深度交流
           </router-link>
         </li>
         <!-- 移动端底栏入口:独立"我的"页面 -->
         <li class="mobile-only">
           <router-link to="/me">
-            <SvgIcon iconName="setting" />
+            <user-outlined />
             我的
           </router-link>
         </li>
@@ -88,7 +88,10 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import type { TourProps } from "ant-design-vue";
 import { SettingOutlined, LogoutOutlined, DashboardOutlined } from '@ant-design/icons-vue';
-import SvgIcon from "../SvgIcon.vue";
+import {
+  AppstoreOutlined, FileTextOutlined, MessageOutlined,
+  RobotOutlined, UserOutlined
+} from "@ant-design/icons-vue";
 import { useResumeStore } from "../../store/useResumeStore";
 import { useBackendHealth } from "../../composables/useBackendHealth";
 import { useIsMobile } from "../../composables/useIsMobile";
@@ -201,28 +204,29 @@ onMounted(() => {
 }
 
 .navbar nav ul li a:hover {
-  background-color: rgba(45, 91, 255, 0.1);
+  background-color: rgba(81, 120, 156, 0.1);
   color: var(--primary-color);
 }
 
 .navbar nav ul li .router-link-active {
-  background: rgba(45, 91, 255, 0.16);
+  background: rgba(81, 120, 156, 0.16);
   color: var(--primary-color);
   font-weight: 600;
 }
 
 :global(html.dark .navbar nav ul li a:hover) {
-  background-color: rgba(59, 108, 255, 0.18);
+  background-color: rgba(111, 147, 189, 0.18);
   color: #ffffff;
 }
 
 :global(html.dark .navbar nav ul li .router-link-active) {
-  background: rgba(59, 108, 255, 0.24);
+  background: rgba(111, 147, 189, 0.24);
   color: #ffffff;
 }
 
-.navbar :deep(.svg-icon) {
-  font-size: 18px;
+.navbar :deep(.anticon) {
+  font-size: 17px;
+  color: inherit;
 }
 
 /* 桌面端用户区 */

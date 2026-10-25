@@ -183,8 +183,8 @@ const getTemplateImage = (template: Template): string => {
 }
 
 .selected-template {
-  border: 1px solid rgba(59, 108, 255, 0.7);
-  box-shadow: 0 0 0 1px rgba(59, 108, 255, 0.3), 0 24px 48px rgba(0, 0, 0, 0.32);
+  border: 1px solid rgba(111, 147, 189, 0.7);
+  box-shadow: 0 0 0 1px rgba(111, 147, 189, 0.3), 0 24px 48px rgba(0, 0, 0, 0.32);
 }
 
 .selected-badge {
@@ -257,8 +257,8 @@ const getTemplateImage = (template: Template): string => {
 }
 
 .selected-button {
-  background-color: rgba(59, 108, 255, 0.14) !important;
-  border: 1px solid rgba(59, 108, 255, 0.5) !important;
+  background-color: rgba(111, 147, 189, 0.14) !important;
+  border: 1px solid rgba(111, 147, 189, 0.5) !important;
   color: #9ab4ff !important;
 }
 

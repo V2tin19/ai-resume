@@ -215,7 +215,7 @@ const onMenuClick = ({ key }: { key: string | number }, moduleKey: SectionKey) =
 
 .module-wrapper.is-drag-over {
   outline: 2px dashed var(--primary-color);
-  border-color: rgba(59, 108, 255, 0.32);
+  border-color: rgba(111, 147, 189, 0.32);
 }
 
 .module-drag-handle {
