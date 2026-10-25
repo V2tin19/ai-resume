@@ -191,4 +191,25 @@ const skip = () => {
 .skip-row a {
   color: var(--text-muted);
 }
+
+@media (max-width: 768px) {
+  .auth-container {
+    align-items: flex-start;
+    padding: max(24px, env(safe-area-inset-top)) 16px calc(32px + env(safe-area-inset-bottom));
+  }
+
+  .auth-card {
+    padding: 22px 16px;
+    border-radius: 14px;
+  }
+
+  .auth-card :deep(.ant-btn) {
+    min-height: 42px;
+  }
+
+  .auth-card :deep(.ant-input),
+  .auth-card :deep(.ant-input-affix-wrapper) {
+    min-height: 42px;
+  }
+}
 </style>

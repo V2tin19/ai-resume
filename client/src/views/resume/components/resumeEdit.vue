@@ -10,16 +10,31 @@
       @dragleave="onModuleDragLeave(module.key)"
       @drop="onModuleDrop(module.key, $event)"
     >
-      <button
-        class="module-drag-handle"
-        type="button"
-        draggable="true"
-        :aria-label="`拖拽调整${module.label}模块顺序`"
-        @dragstart="onModuleDragStart(module.key, $event)"
-        @dragend="onModuleDragEnd"
-      >
-        <MenuOutlined />
-      </button>
+      <a-dropdown :trigger="['click']">
+        <button
+          class="module-drag-handle"
+          type="button"
+          draggable="true"
+          :aria-label="`调整${module.label}模块顺序`"
+          @dragstart="onModuleDragStart(module.key, $event)"
+          @dragend="onModuleDragEnd"
+        >
+          <MenuOutlined />
+        </button>
+        <template #overlay>
+          <a-menu @click="(info: any) => onMenuClick(info, module.key)">
+            <a-menu-item key="up" :disabled="isFirstModule(module.key)">
+              <arrow-up-outlined /> 上移
+            </a-menu-item>
+            <a-menu-item key="down" :disabled="isLastModule(module.key)">
+              <arrow-down-outlined /> 下移
+            </a-menu-item>
+            <a-menu-item key="bottom" :disabled="isLastModule(module.key)">
+              <vertical-align-bottom-outlined /> 置底
+            </a-menu-item>
+          </a-menu>
+        </template>
+      </a-dropdown>
       <component :is="module.component" />
     </div>
 
@@ -39,7 +54,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import type { Component } from 'vue';
-import { MenuOutlined } from '@ant-design/icons-vue';
+import { MenuOutlined, ArrowUpOutlined, ArrowDownOutlined, VerticalAlignBottomOutlined } from '@ant-design/icons-vue';
 import { useResumeStore } from '../../../store';
 import type { SectionKey } from '../../../types/resume';
 import { sectionLabels } from '../../../constants/sectionLabels';
@@ -152,6 +167,31 @@ const onDropToEnd = (event: DragEvent) => {
 
   draggingModule.value = null;
   dragOverModule.value = null;
+};
+
+// ---- 把手菜单:触摸设备无法拖拽时的排序入口(桌面同样可用) ----
+const isFirstModule = (key: SectionKey) => resumeStore.sectionOrder[0] === key;
+const isLastModule = (key: SectionKey) =>
+  resumeStore.sectionOrder[resumeStore.sectionOrder.length - 1] === key;
+
+const onHandleMenuClick = (action: string, key: SectionKey) => {
+  const order = [...resumeStore.sectionOrder];
+  const index = order.indexOf(key);
+  if (index < 0) return;
+
+  if (action === 'bottom') {
+    order.splice(index, 1);
+    order.push(key);
+  } else {
+    const target = action === 'up' ? index - 1 : index + 1;
+    if (target < 0 || target >= order.length) return;
+    [order[index], order[target]] = [order[target], order[index]];
+  }
+  resumeStore.setSectionOrder(order);
+};
+
+const onMenuClick = ({ key }: { key: string | number }, moduleKey: SectionKey) => {
+  onHandleMenuClick(String(key), moduleKey);
 };
 </script>
 

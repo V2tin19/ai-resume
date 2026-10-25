@@ -103,11 +103,11 @@
             </div>
           </a-tab-pane>
 
-          <a-tab-pane key="knowledge" tab="知识库管理">
+          <a-tab-pane v-if="!isMobile" key="knowledge" tab="知识库管理">
             <KnowledgeBasePanel />
           </a-tab-pane>
 
-          <a-tab-pane v-if="isAdmin" key="model" tab="模型服务">
+          <a-tab-pane v-if="!isMobile && isAdmin" key="model" tab="模型服务">
             <ModelConfigPanel />
           </a-tab-pane>
         </a-tabs>
@@ -268,6 +268,7 @@ import { useRouter } from "vue-router";
 import { generateResume, getPromptTemplates } from "../../api/agentAPI";
 import { useResumeStore } from "../../store";
 import { useBackendHealth } from "../../composables/useBackendHealth";
+import { useIsMobile } from "../../composables/useIsMobile";
 import { sectionLabels } from "../../constants/sectionLabels";
 import { getSessionUser } from "../../utils/auth";
 import KnowledgeBasePanel from "./components/KnowledgeBasePanel.vue";
@@ -277,6 +278,8 @@ import type { GeneratedResumeResponse, PromptTemplate, ResumeGenerateRequest } f
 const router = useRouter();
 const resumeStore = useResumeStore();
 const health = useBackendHealth();
+// 移动端核心链路版不透出运营类面板(知识库/模型服务)
+const { isMobile } = useIsMobile();
 // 模型服务配置仅运营者可见(后端接口另有 admin 鉴权兜底)
 const isAdmin = getSessionUser()?.role === "admin";
 

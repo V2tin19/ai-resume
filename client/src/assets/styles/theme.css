@@ -292,4 +292,21 @@ a {
   .ant-select-dropdown {
     max-width: calc(100vw - 24px);
   }
+
+  .ant-dropdown-menu {
+    max-width: calc(100vw - 24px);
+  }
+
+  .ant-dropdown-menu-item {
+    min-height: 44px;
+  }
+
+  .ant-modal {
+    top: 24px;
+  }
+
+  .ant-modal-body {
+    max-height: calc(100vh - 220px);
+    overflow-y: auto;
+  }
 }

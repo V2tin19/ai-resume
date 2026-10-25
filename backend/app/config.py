@@ -70,7 +70,10 @@ class Settings(BaseSettings):
     # ------------------------------------------------------------------
     host: str = "127.0.0.1"
     port: int = 8000
-    cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
+    cors_origins: str = (
+        "http://localhost:5173,http://127.0.0.1:5173,"
+        "http://tauri.localhost,tauri://localhost"  # 桌面/移动 Tauri WebView origin
+    )
 
     # ------------------------------------------------------------------
     # 数据目录(测试可覆盖;发行包中为包根下 data/)

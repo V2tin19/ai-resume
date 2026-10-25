@@ -99,14 +99,11 @@ export function setAutoServerBase(url: string): void {
 }
 
 export function getServerBase(): string {
-  // 用户手填的地址优先(连接自建服务端),其次是桌面壳注入的本机后端
+  // 用户手填的地址优先(连接自建服务端),其次是桌面壳注入的本机后端。
+  // 移动端壳注入为空 → 未配置时返回空串,请求将失败并由健康指示引导配置服务器地址。
   const configured = safeGet(SERVER_URL_KEY).replace(/\/+$/, "");
   if (configured) return configured;
-  if (autoServerBase) return autoServerBase;
-  if (isTauriEnv()) {
-    return "http://127.0.0.1:8000";
-  }
-  return "";
+  return autoServerBase;
 }
 
 export function setServerBase(url: string): void {
