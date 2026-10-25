@@ -71,6 +71,14 @@ npx tauri build
 - 安装包内嵌后端运行时（`bundle.resources`），双击启动由 Tauri 壳自动拉起（端口 8000 被占则 8001-8010 递增）。
 - 桌面端数据目录：`%APPDATA%\com.airesume.app\backend-data\`（数据库 + `admin-credentials.txt` 内置管理员随机口令 + `backend.log`）。
 - 重建内嵌后端：`powershell -File client\src-tauri\scripts\prepare-backend.ps1 -Force`；纯前端调试设 `TAURI_SKIP_BACKEND=1`。
+- Android APK（arm64，连接远程服务器使用）：
+  ```powershell
+  # 环境变量: JAVA_HOME=jdk21, ANDROID_HOME, NDK_HOME;开发机需开 Windows 开发者模式(symlink)
+  cd client; npx tauri android build --apk --target aarch64
+  # 签名(密钥 gen/android/ai-resume.keystore,storepass 同 keypass,勿提交;升级必须同签名):
+  build-tools/36.0.0/zipalign -f 4 <unsigned.apk> aligned.apk
+  build-tools/36.0.0/apksigner sign --ks ai-resume.keystore --out ai-resume-v1.0.0-arm64.apk aligned.apk
+  ```
 - CI：打 `v*` tag 或手动 dispatch `release-app.yml` → Actions 产物 `AI-Resume-Windows-Desktop`（Android 构建在 `release-android-draft.yml`，休眠中）。
 
 ## 4. 开发环境
