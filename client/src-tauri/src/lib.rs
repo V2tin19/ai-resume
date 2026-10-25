@@ -165,10 +165,12 @@ fn ensure_backend(app: &AppHandle) -> BackendState {
     }
 
     // 2) 找内嵌运行时;资源缺失(dev 未暂存) → 维持默认地址,前端显示离线指引
+    // Tauri 资源映射:bundle.resources 的 "resources/backend" 落在 <resource_dir>/resources/backend
     let mut resources = app
         .path()
         .resource_dir()
         .unwrap_or_else(|_| PathBuf::from("."))
+        .join("resources")
         .join("backend");
     // dev 模式 resource_dir 不含 bundle resources,回退到源码目录(tauri dev 可用)
     #[cfg(debug_assertions)]
