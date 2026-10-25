@@ -101,9 +101,17 @@ export function setAutoServerBase(url: string): void {
 export function getServerBase(): string {
   // 用户手填的地址优先(连接自建服务端),其次是桌面壳注入的本机后端。
   // 移动端壳注入为空 → 未配置时返回空串,请求将失败并由健康指示引导配置服务器地址。
-  const configured = safeGet(SERVER_URL_KEY).replace(/\/+$/, "");
+  const configured = normalizeServerUrl(safeGet(SERVER_URL_KEY));
   if (configured) return configured;
   return autoServerBase;
+}
+
+/** 容错:用户填地址漏了协议前缀时自动补 http:// */
+function normalizeServerUrl(url: string): string {
+  const trimmed = url.replace(/\/+$/, "");
+  if (!trimmed) return "";
+  if (/^https?:\/\//i.test(trimmed)) return trimmed;
+  return `http://${trimmed}`;
 }
 
 export function setServerBase(url: string): void {

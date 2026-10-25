@@ -95,6 +95,7 @@ import {
 import { useResumeStore } from "../../store/useResumeStore";
 import { useBackendHealth } from "../../composables/useBackendHealth";
 import { useIsMobile } from "../../composables/useIsMobile";
+import { logoutAccount } from "../../api/agentAPI";
 import { getSessionUser, clearSession, type SessionUser } from "../../utils/auth";
 
 const store = useResumeStore();
@@ -116,11 +117,15 @@ watch(
   }
 );
 
-const onMenuClick = ({ key }: { key: string | number }) => {
+const onMenuClick = async ({ key }: { key: string | number }) => {
   if (key === 'settings') {
     router.push({ name: 'me' });
   } else if (key === 'admin') {
     router.push({ name: 'admin' });
+  } else if (key === 'logout') {
+    await logoutAccount();
+    session.value = null;
+    router.push({ name: 'resume' });
   } else if (key === 'auth') {
     clearSession();
     router.push({ name: 'auth' });

@@ -18,7 +18,9 @@ android {
     compileSdk = 37
     namespace = "com.airesume.app"
     defaultConfig {
-        manifestPlaceholders["usesCleartextTraffic"] = "false"
+        // 客户端需要直连 http://<IP>:8000 形式的自建服务器(暂无 HTTPS),release 须允许明文;
+        // 服务器端 HTTPS 化后可收回
+        manifestPlaceholders["usesCleartextTraffic"] = "true"
         applicationId = "com.airesume.app"
         minSdk = 24
         targetSdk = 37
