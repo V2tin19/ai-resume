@@ -12,7 +12,7 @@
 | 服务端 | Python 3.11+ / FastAPI / SQLite，单进程 | 端口 8000，同时托管 Web 前端静态页，**零外部依赖**（无 Redis/消息队列/独立 DB） |
 | Web 前端 | Vue 3.5 + Ant Design Vue 4 + Pinia | 由服务端托管，浏览器直接访问即为完整产品 |
 | Windows 桌面端 | Tauri 2 壳 + 内嵌后端运行时 | 安装包自带后端（约 120MB），双击即用，不依赖服务器 |
-| Android / Linux 壳 | 骨架/草稿 | 未发布（Linux 曾交付 PyQt6 壳；Android 工作流已休眠） |
+| Android 端 | Tauri 2 Android 壳（APK） | **已交付**：连接远程服务器使用，账号与云端档案跨端同步；Linux 桌面壳仍为骨架 |
 
 仓库：单仓 monorepo。`backend/` 服务端、`client/` 前端与桌面壳、`deploy/` 部署脚本、`client/src/template/` 5 套简历模板。
 
@@ -35,6 +35,7 @@
 | `runtime.sqlite3` | LLM 在线配置覆盖层 | 回退到 .env 配置 |
 | `usage.sqlite3` | 使用统计与审计日志 | 统计/审计清零（不影响业务） |
 | `prompt-templates.json` | 5 套提示词模板 | 生成功能不可用（可从仓库 `backend/data/` 恢复） |
+| `templates.json` | 前端模板市场元数据 | 模板市场回退为随客户端内置列表 |
 
 **备份**：优先停服后整目录拷贝；在线备份用 `sqlite3 <db> ".backup '<目标>'"` 逐库做（WAL 模式下直接 cp 主文件可能不一致）。`*-wal/-shm` 文件随主文件一起处理。
 
@@ -66,6 +67,7 @@
 - `POST /generate-resume` — 核心生成（限流：每用户每分钟若干次，429）
 - `POST /chat` — SSE 流式 AI 对话
 - `POST /export-resume/docx` — Word 导出（PDF 在客户端本地渲染）
+- `GET /templates` — 前端模板市场元数据分发（改 data/templates.json 即时生效）
 - `GET|POST /profiles`、`GET|PUT|DELETE /profiles/{id}` — 用户简历档案（登录）
 - `GET|PUT|DELETE /llm-config`、`POST /llm-config/test` — LLM 配置（admin）
 - `GET /admin/users|stats|events`、`PATCH /admin/users/{id}/status`、`POST /admin/users/{id}/reset-password` — 运营后台（admin）
@@ -89,6 +91,7 @@
 4. 不要绕过 `.env` 把 API Key 写进代码/前端（前端永远不应出现 Key）。
 5. 升级前先备份 `data/`；回滚=换回旧 `app/` 目录即可（数据库结构向后兼容策略：`CREATE TABLE IF NOT EXISTS`，新增字段有默认值）。
 6. LLM 生成走 `/generate-resume` 与 `/chat`，均有限流；上游模型超时默认 55s（`LLM_TIMEOUT`）。
+7. 用户自带 Key(BYOK) 由后端当次转发、不落库（已内建）——运维侧同样不要把它写进日志或备份。
 
 ## 9. 测试与质量基线
 
@@ -104,6 +107,7 @@
 | [README.md](README.md) | 项目总览与快速启动 | **现行** |
 | [backend-api.md](backend-api.md) / [frontend-api.md](frontend-api.md) | API 契约（核心接口；新接口见 Swagger） | 现行（增量） |
 | [deploy/README-DEPLOY.md](deploy/README-DEPLOY.md) | Linux 发行包落地细节（systemd/脚本） | 现行 |
+| [ACCEPTANCE.md](ACCEPTANCE.md) | 服务器部署验收清单（部署后逐项勾选 + 远程验收口径） | **现行** |
 | [CHANGES.md](CHANGES.md) | 重构期变更清单（历史） | 归档 |
 | [REFACTOR_PLAN.md](REFACTOR_PLAN.md) / [CS_MIGRATION_PLAN.md](CS_MIGRATION_PLAN.md) | 已完成的改造计划（历史决策依据） | 归档 |
 | [TEAM_GUIDE.md](TEAM_GUIDE.md) | 课程团队分工（历史） | 归档 |

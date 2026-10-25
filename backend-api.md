@@ -721,3 +721,19 @@ LLM_MODEL=qwen2.5:7b
 | GET | `/api/admin/events?limit=&offset=&type=` | 审计日志倒序(埋点:generate/chat/export_docx/register/login/llm_config_*/user_*/password_*) |
 
 另:`POST /api/auth/change-password` `{oldPassword, newPassword}`(登录用户改自己,验旧密码)。
+
+
+## 13. 模板分发(2026-10 新增)
+
+| 方法 | 路径 | 说明 |
+| --- | --- | --- |
+| GET | `/api/templates` | 前端简历模板市场元数据列表(读 `data/templates.json`) |
+
+运营者增删改 `data/templates.json` 即对全部客户端即时生效(下架/改文案/排序);
+客户端在服务端不可用或列表为空时回退为随版本打包的内置列表(离线可用)。
+
+## 14. 用户自带 Key(BYOK,2026-10 新增)
+
+`POST /generate-resume` 与 `POST /chat` 的请求体均接受可选字段
+`userLlm: {apiUrl, apiKey, model}`:存在时该次请求使用用户提供的模型配置,
+**服务端当次转发、不落库、审计只记事件不记明文**;缺省回落服务端配置。

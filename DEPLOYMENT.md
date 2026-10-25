@@ -105,6 +105,8 @@ cd client && npx vite --port 5199
 | SQLite busy/locked | 确认没有第二个实例共用同一 DATA_DIR |
 | 端口被占/换端口 | 重跑 `install.sh PORT=新端口` 或改 unit 的 `ExecStart` 后 `daemon-reload`（`.env` 的 PORT 不影响 systemd 监听）；`ss -ltnp | grep 8000` 查占用；桌面壳自身会自动换 8001+ |
 | 桌面端红点离线 | 看 `%APPDATA%\com.airesume.app\backend-data\backend.log`；多为杀软拦截 python 或资源暂存不完整(重跑 prepare-backend.ps1 -Force) |
+| 模板市场列表异常 | 检查 `data/templates.json` 格式(JSON 数组);损坏/缺失时客户端自动回退内置列表 |
+| 生成报"服务端未配置模型接口" | 服务端未配 LLM 且用户未开自带 Key——运营后台「模型服务」配置,或让用户在「我的 → AI 模型」用自带 Key |
 
 ## 6. 安全基线
 
