@@ -52,7 +52,11 @@ class Settings(BaseSettings):
     # 账号体系(自助注册)
     # ------------------------------------------------------------------
     registration_mode: str = "open"  # open|invite|closed
-    invite_code: str = ""            # registration_mode=invite 时必填
+    # 兼容 AUTH_INVITE_CODE(旧 .env.example 误写)与 INVITE_CODE(正确名)
+    invite_code: str = Field(
+        default="",
+        validation_alias=AliasChoices("INVITE_CODE", "AUTH_INVITE_CODE"),
+    )  # registration_mode=invite 时必填
     admin_username: str = ""         # 首次启动引导创建运营者账号
     admin_password: str = ""
     token_ttl_days: int = 7

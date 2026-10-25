@@ -78,7 +78,7 @@
 | 看日志 | systemd: `journalctl -u ai-resume -f`；前台: stdout |
 | 改 LLM 配置 | 界面操作（admin → 模型服务 → 测试连接 → 保存），不要手改 runtime.sqlite3 |
 | 重置用户密码 | 运营后台 → 用户管理 → 重置密码 |
-| 换端口/对外监听 | 改 `.env` 的 `HOST`/`PORT` 后重启；防火墙放行 |
+| 换端口/对外监听 | 重跑 `install.sh` 传 `PORT`/`BIND_HOST`，或编辑 systemd unit 的 `ExecStart` 后 `daemon-reload`（`.env` 的 `HOST`/`PORT` 不影响监听——unit 用 CLI 参数绑定；`.env` 其余配置由 pydantic 从 WorkingDirectory 读入，改后重启生效） |
 | 升级版本 | 见 DEPLOYMENT.md §升级（替换 app/ 与 static/，data/ 与 .env 不动） |
 
 ## 8. 不变量（不要做）
