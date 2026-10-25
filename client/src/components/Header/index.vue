@@ -38,7 +38,7 @@
 
     <!-- 桌面端右上角用户区 -->
     <div class="user-area">
-      <a-dropdown :trigger="['click']">
+      <a-dropdown :trigger="['click']" :overlay-style="{ minWidth: '160px' }">
         <button ref="userMenuRef" class="user-chip" type="button">
           <span class="user-avatar">
             {{ session ? session.username.slice(0, 1).toUpperCase() : '?' }}

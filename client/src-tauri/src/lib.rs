@@ -282,6 +282,8 @@ fn backend_info(state: tauri::State<BackendState>) -> BackendInfo {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let app = tauri::Builder::default()
+        .plugin(tauri_plugin_dialog::init())
+        .plugin(tauri_plugin_fs::init())
         .setup(|app| {
             let state = ensure_backend(app.handle());
             println!("[backend] url={} managed={}", state.url, state.managed);

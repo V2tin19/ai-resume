@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 import { resumeTemplate } from '../data/resumeDataTemplate.ts';
 import { normalizeSectionOrder } from '../constants/sectionOrder';
 import { message } from 'ant-design-vue';
+import { saveBlob } from '../utils/download';
 // 定义类型
 import type {
   Education, Honor, PersonalInfo,
@@ -72,17 +73,12 @@ export const useResumeStore = defineStore('resume', {
       localStorage.setItem('currentId', JSON.stringify(this.currentId));
     },
     // 导出数据
-    exportData() {
-      const dataStr = JSON.stringify(this.$state, null, 2); // 格式化 JSON 
+    async exportData() {
+      const dataStr = JSON.stringify(this.$state, null, 2); // 格式化 JSON
       const blob = new Blob([dataStr], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "resume_data.json";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      // 浏览器走 <a download>;桌面端(WebView2)走原生保存对话框
+      const saved = await saveBlob(blob, "resume_data.json");
+      if (saved) message.success('数据导出成功');
     },
     // 导入数据
     importData(file: File) {
