@@ -165,7 +165,7 @@ onMounted(() => {
   transition: background 0.3s ease, border-color 0.3s ease;
 }
 
-:global(html.dark) .navbar {
+:global(html.dark .navbar) {
   background: linear-gradient(90deg, rgba(4, 7, 13, 0.98), rgba(13, 20, 32, 0.96) 40%, rgba(15, 31, 61, 0.95) 100%);
   box-shadow: 0 16px 40px var(--shadow-color);
 }
@@ -211,12 +211,12 @@ onMounted(() => {
   font-weight: 600;
 }
 
-:global(html.dark) .navbar nav ul li a:hover {
+:global(html.dark .navbar nav ul li a:hover) {
   background-color: rgba(59, 108, 255, 0.18);
   color: #ffffff;
 }
 
-:global(html.dark) .navbar nav ul li .router-link-active {
+:global(html.dark .navbar nav ul li .router-link-active) {
   background: rgba(59, 108, 255, 0.24);
   color: #ffffff;
 }
