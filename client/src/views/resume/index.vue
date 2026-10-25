@@ -126,12 +126,15 @@ const handleFileUpload = (file: File) => {
 }
 
 .btn-group {
-  height: 50px;
+  min-height: 50px;
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  gap: 16px;
-  padding: 0 12px;
+  align-content: center;
+  row-gap: 8px;
+  gap: 12px 16px;
+  padding: 8px 12px;
   background: var(--toolbar-bg);
   border-bottom: 1px solid var(--border-color);
   backdrop-filter: blur(16px);
@@ -195,12 +198,9 @@ const handleFileUpload = (file: File) => {
   }
 
   .btn-group {
-    height: auto;
-    min-height: 58px;
     justify-content: flex-start;
     gap: 8px;
     padding: 9px;
-    overflow-x: auto;
   }
 
   .btn-group-actions {
