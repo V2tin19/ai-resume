@@ -1,4 +1,4 @@
-# AI Resume Server - Windows 自包含发行包构建(零网络)
+﻿# AI Resume Server - Windows 自包含发行包构建(零网络)
 # 在 Windows 机器(已安装 Python 3.11+ 并建好 backend\.venv、client\dist)上执行:
 #   powershell -ExecutionPolicy Bypass -File backend\scripts\build_release.ps1            # lite
 #   powershell -ExecutionPolicy Bypass -File backend\scripts\build_release.ps1 -Full      # full

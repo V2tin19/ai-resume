@@ -1,4 +1,4 @@
-# AI Resume Server - Windows 离线安装
+﻿# AI Resume Server - Windows 离线安装
 # 用法(管理员 PowerShell): .\install.ps1 [-InstallDir C:\ai-resume] [-Port 8000]
 param(
     [string]$InstallDir = "C:\ai-resume",

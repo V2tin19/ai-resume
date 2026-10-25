@@ -1,4 +1,4 @@
-# 为 Tauri 打包暂存后端自包含运行时(作为 bundle resources)
+﻿# 为 Tauri 打包暂存后端自包含运行时(作为 bundle resources)
 # 产出: client/src-tauri/resources/backend/{app,runtime,static,data}
 # 用法:
 #   powershell -ExecutionPolicy Bypass -File client\src-tauri\scripts\prepare-backend.ps1          # 已存在则跳过
